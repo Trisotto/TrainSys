@@ -4,6 +4,7 @@ services:
 
   db:
     image: postgres
+    restart: always
     container_name: trainsysdb
     build:
       context: ./db
@@ -11,6 +12,7 @@ services:
       POSTGRES_DB: trainsysdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+    volumes:
+      - ./data:/var/lib/postgresql/data
     ports:
-      - 5431:5432
-    restart: always
+      - "5431:5432"
