@@ -3,7 +3,6 @@ version: '3.8'
 services:
 
   db:
-    image: postgres
     restart: always
     container_name: trainsysdb
     build:
@@ -12,7 +11,5 @@ services:
       POSTGRES_DB: trainsysdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-    volumes:
-      - ./data:/var/lib/postgresql/data
     ports:
       - "5431:5432"
