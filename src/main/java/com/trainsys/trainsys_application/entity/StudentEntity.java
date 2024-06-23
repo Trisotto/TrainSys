@@ -2,7 +2,7 @@ package com.trainsys.trainsys_application.entity;
 
 import com.trainsys.trainsys_application.config.database.DatabaseSchema;
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "students", schema = DatabaseSchema.DEV)
@@ -20,7 +20,7 @@ public class StudentEntity {
 
     @Column(name = "date_birth", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date dateBirth;
+    private LocalDate dateBirth;
 
     @Column(name = "cpf", nullable = false, unique = true, length = 14)
     private String cpf;
@@ -74,11 +74,11 @@ public class StudentEntity {
         this.email = email;
     }
 
-    public Date getDateBirth() {
+    public LocalDate getDateBirth() {
         return dateBirth;
     }
 
-    public void setDateBirth(Date dateBirth) {
+    public void setDateBirth(LocalDate dateBirth) {
         this.dateBirth = dateBirth;
     }
 

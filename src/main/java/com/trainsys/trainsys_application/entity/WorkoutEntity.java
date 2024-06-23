@@ -30,7 +30,7 @@ public class WorkoutEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "day", nullable = false)
-    private DayOfWeekEntity day;
+    private DayOfWeekEnum day;
 
     @Column(name = "observations", columnDefinition = "TEXT")
     private String observations;
@@ -86,11 +86,11 @@ public class WorkoutEntity {
         this.breakTime = breakTime;
     }
 
-    public DayOfWeekEntity getDay() {
+    public DayOfWeekEnum getDay() {
         return day;
     }
 
-    public void setDay(DayOfWeekEntity day) {
+    public void setDay(DayOfWeekEnum day) {
         this.day = day;
     }
 
