@@ -1,5 +1,5 @@
 package com.trainsys.trainsys_application.entity;
 
-public enum DayOfWeekEntity {
+public enum DayOfWeekEnum {
     MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
 }
