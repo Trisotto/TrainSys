@@ -1,7 +1,9 @@
 package com.trainsys.trainsys_application.controller;
 
 import com.trainsys.trainsys_application.dto.RegisterUserDto;
+import com.trainsys.trainsys_application.dto.LoginUserDto;
 import com.trainsys.trainsys_application.entity.UserEntity;
+import com.trainsys.trainsys_application.response.LoginResponse;
 import com.trainsys.trainsys_application.service.AuthenticationService;
 import com.trainsys.trainsys_application.service.JwtService;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +28,16 @@ public class AuthenticationController {
         UserEntity registeredUser = authenticationService.signUp(registerUserDto);
 
         return ResponseEntity.ok(registeredUser);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+        UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
+
+        String jwtToken = jwtService.generateToken(authenticatedUser);
+
+        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+
+        return ResponseEntity.ok(loginResponse);
     }
 }
