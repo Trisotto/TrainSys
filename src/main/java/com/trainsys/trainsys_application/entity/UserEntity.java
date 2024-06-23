@@ -2,11 +2,16 @@ package com.trainsys.trainsys_application.entity;
 
 import com.trainsys.trainsys_application.config.database.DatabaseSchema;
 import jakarta.persistence.*;
-import java.util.Date;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users", schema = DatabaseSchema.DEV)
-public class UserEntity {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -20,7 +25,7 @@ public class UserEntity {
 
     @Column(name = "date_birth", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date dateBirth;
+    private LocalDate dateBirth;
 
     @Column(name = "cpf", nullable = false, unique = true, length = 14)
     private String cpf;
@@ -31,6 +36,40 @@ public class UserEntity {
     @ManyToOne
     @JoinColumn(name = "plan_id", nullable = false)
     private PlanEntity plan;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private RoleEntity role;
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     public Long getId() {
         return id;
@@ -56,11 +95,11 @@ public class UserEntity {
         this.email = email;
     }
 
-    public Date getDateBirth() {
+    public LocalDate getDateBirth() {
         return dateBirth;
     }
 
-    public void setDateBirth(Date dateBirth) {
+    public void setDateBirth(LocalDate dateBirth) {
         this.dateBirth = dateBirth;
     }
 
@@ -86,5 +125,13 @@ public class UserEntity {
 
     public void setPlan(PlanEntity plan) {
         this.plan = plan;
+    }
+
+    public RoleEntity getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEntity role) {
+        this.role = role;
     }
 }

@@ -1,7 +1,7 @@
 -- Insert into users
-INSERT INTO dev.users (name, email, date_birth, cpf, password, plan_id) VALUES
-    ('John Doe', 'john.doe@example.com', '1980-01-01', '123.456.789-00', 'password123', 1),
-    ('Jane Smith', 'jane.smith@example.com', '1990-02-02', '987.654.321-00', 'password456', 2);
+INSERT INTO dev.users (name, email, date_birth, cpf, password, plan_id, role_id) VALUES
+    ('John Doe', 'john.doe@example.com', '1980-01-01', '123.456.789-00', '$2a$10$DB7PnvkiTwyr/Rb4u5yH7e0jcAfJrSNJGzUIRI.yBMxfo8QQfnwfe', 1, 1),
+    ('Jane Smith', 'jane.smith@example.com', '1990-02-02', '987.654.321-00', '$2a$10$s60p8W1pqSAXKlSN.GOa8OH6GabYOJTRBznfz1TPvnFLtpEzUDQkq', 2, 1);
 
 -- Insert into exercises
 INSERT INTO dev.exercises (description, user_id) VALUES

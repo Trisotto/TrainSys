@@ -1,5 +1,7 @@
 ALTER TABLE dev.users ADD CONSTRAINT fk_users_plans FOREIGN KEY (plan_id) REFERENCES dev.plans(id);
 
+ALTER TABLE dev.users ADD CONSTRAINT fk_users_roles FOREIGN KEY (role_id) REFERENCES dev.roles(id);
+
 ALTER TABLE dev.exercises ADD CONSTRAINT fk_exercises_users FOREIGN KEY (user_id) REFERENCES dev.users(id);
 
 ALTER TABLE dev.students ADD CONSTRAINT fk_students_users FOREIGN KEY (user_id) REFERENCES dev.users(id);
