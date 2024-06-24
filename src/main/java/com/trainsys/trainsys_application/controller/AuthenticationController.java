@@ -9,12 +9,10 @@ import com.trainsys.trainsys_application.service.AuthenticationService;
 import com.trainsys.trainsys_application.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
 
 @RequestMapping("/auth")
 @RestController
@@ -28,36 +26,28 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto) {
-        try {
-            UserEntity registeredUser = authenticationService.signUp(registerUserDto);
-            SignUpResponse signUpResponse  = new SignUpResponse();
-            signUpResponse.setName(registeredUser.getName());
-            signUpResponse.setEmail(registeredUser.getEmail());
-            signUpResponse.setDateBirth(registeredUser.getDateBirth());
-            signUpResponse.setCpf(registeredUser.getCpf());
-            signUpResponse.setPlanName(registeredUser.getPlan().getName());
-            signUpResponse.setRoleDescription(registeredUser.getRole().getDescription());
-            return new ResponseEntity<>(signUpResponse, HttpStatus.CREATED);
-        } catch (Exception  e) {
-            return new ResponseEntity<>(STR."Invalid request: \{e.getMessage()}", HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<SignUpResponse> register(@RequestBody RegisterUserDto registerUserDto) {
+        UserEntity registeredUser = authenticationService.signUp(registerUserDto);
+
+        SignUpResponse signUpResponse  = new SignUpResponse();
+        signUpResponse.setName(registeredUser.getName());
+        signUpResponse.setEmail(registeredUser.getEmail());
+        signUpResponse.setDateBirth(registeredUser.getDateBirth());
+        signUpResponse.setCpf(registeredUser.getCpf());
+        signUpResponse.setPlanName(registeredUser.getPlan().getName());
+        signUpResponse.setRoleDescription(registeredUser.getRole().getDescription());
+
+        return new ResponseEntity<>(signUpResponse, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        try{
-            UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+        UserEntity authenticatedUser = authenticationService.authenticate(loginUserDto);
 
-            String jwtToken = jwtService.generateToken(authenticatedUser);
+        String jwtToken = jwtService.generateToken(authenticatedUser);
 
-            LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime()).setName(authenticatedUser.getName());
+        LoginResponse loginResponse = new LoginResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime()).setName(authenticatedUser.getName());
 
-            return ResponseEntity.ok(loginResponse);
-        } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(STR."Invalid request: \{e.getMessage()}", HttpStatus.UNAUTHORIZED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(STR."Invalid request: \{e.getMessage()}", HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 }
