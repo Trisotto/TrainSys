@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/exercises")
 public class ExerciseController {
@@ -27,5 +29,11 @@ public class ExerciseController {
     public ResponseEntity<?> createExercise(@AuthenticationPrincipal UserEntity user, @Valid @RequestBody RegisterExerciseDto request) {
         ExerciseResponse createdExercise = exerciseService.createExercise(user, request);
         return new ResponseEntity<>(createdExercise, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> listExercises(@AuthenticationPrincipal UserEntity user) {
+        List<ExerciseResponse> exercises = exerciseService.getExercises(user);
+        return new ResponseEntity<>(exercises, HttpStatus.OK);
     }
 }

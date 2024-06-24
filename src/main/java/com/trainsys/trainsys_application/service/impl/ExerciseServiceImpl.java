@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
     @Autowired
@@ -28,6 +31,13 @@ public class ExerciseServiceImpl implements ExerciseService {
         exercise.setUser(user);
         exercise.setDescription(request.getDescription());
         ExerciseEntity savedExercise = exerciseRepository.save(exercise);
-        return new ExerciseResponse(savedExercise.getDescription());
+        return new ExerciseResponse(savedExercise.getId(), savedExercise.getDescription());
+    }
+
+    public List<ExerciseResponse> getExercises(UserEntity user) {
+        List<ExerciseEntity> exercises = exerciseRepository.findByUserOrderByDescription(user);
+        return exercises.stream()
+                .map(exercise -> new ExerciseResponse(exercise.getId(),exercise.getDescription()))
+                .collect(Collectors.toList());
     }
 }
