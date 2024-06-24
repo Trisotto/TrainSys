@@ -4,8 +4,10 @@ import com.trainsys.trainsys_application.dto.RegisterUserDto;
 import com.trainsys.trainsys_application.dto.LoginUserDto;
 import com.trainsys.trainsys_application.entity.UserEntity;
 import com.trainsys.trainsys_application.response.LoginResponse;
+import com.trainsys.trainsys_application.response.SignUpResponse;
 import com.trainsys.trainsys_application.service.AuthenticationService;
 import com.trainsys.trainsys_application.service.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,10 +26,20 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserEntity> register(@RequestBody RegisterUserDto registerUserDto) {
-        UserEntity registeredUser = authenticationService.signUp(registerUserDto);
-
-        return ResponseEntity.ok(registeredUser);
+    public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto) {
+        try {
+            UserEntity registeredUser = authenticationService.signUp(registerUserDto);
+            SignUpResponse signUpResponse  = new SignUpResponse();
+            signUpResponse.setName(registeredUser.getName());
+            signUpResponse.setEmail(registeredUser.getEmail());
+            signUpResponse.setDateBirth(registeredUser.getDateBirth());
+            signUpResponse.setCpf(registeredUser.getCpf());
+            signUpResponse.setPlanName(registeredUser.getPlan().getName());
+            signUpResponse.setRoleDescription(registeredUser.getRole().getDescription());
+            return new ResponseEntity<>(signUpResponse, HttpStatus.CREATED);
+        } catch (Exception  e) {
+            return new ResponseEntity<>("Invalid request: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login")
