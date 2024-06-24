@@ -23,6 +23,13 @@ public class GlobalExceptionHandler {
             return errorDetail;
         }
 
+        if (exception instanceof ConflictException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(409), exception.getMessage());
+            errorDetail.setProperty("description", "Already registered for this user.");
+
+            return errorDetail;
+        }
+
         if (exception instanceof AccountStatusException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
             errorDetail.setProperty("description", "The account is locked");

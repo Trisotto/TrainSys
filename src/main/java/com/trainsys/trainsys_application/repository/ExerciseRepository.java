@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExerciseRepository extends JpaRepository<ExerciseEntity, Long> {
     Integer countByUser(UserEntity user);
+
+    boolean existsByUserAndDescription(UserEntity user, String description);
 }
