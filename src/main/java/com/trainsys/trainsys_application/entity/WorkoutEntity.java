@@ -20,13 +20,13 @@ public class WorkoutEntity {
     private ExerciseEntity exercise;
 
     @Column(name = "repetitions", nullable = false)
-    private int repetitions;
+    private Integer repetitions;
 
     @Column(name = "weight", nullable = false)
-    private double weight;
+    private Double weight;
 
     @Column(name = "break_time", nullable = false)
-    private int breakTime;
+    private Integer breakTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "day", nullable = false)
@@ -36,7 +36,7 @@ public class WorkoutEntity {
     private String observations;
 
     @Column(name = "time", nullable = false)
-    private int time;
+    private Integer time;
 
     public Long getId() {
         return id;
@@ -62,27 +62,27 @@ public class WorkoutEntity {
         this.exercise = exercise;
     }
 
-    public int getRepetitions() {
+    public Integer getRepetitions() {
         return repetitions;
     }
 
-    public void setRepetitions(int repetitions) {
+    public void setRepetitions(Integer repetitions) {
         this.repetitions = repetitions;
     }
 
-    public double getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
-    public int getBreakTime() {
+    public Integer getBreakTime() {
         return breakTime;
     }
 
-    public void setBreakTime(int breakTime) {
+    public void setBreakTime(Integer breakTime) {
         this.breakTime = breakTime;
     }
 
@@ -102,11 +102,11 @@ public class WorkoutEntity {
         this.observations = observations;
     }
 
-    public int getTime() {
+    public Integer getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(Integer time) {
         this.time = time;
     }
 }
