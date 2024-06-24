@@ -30,6 +30,20 @@ public class GlobalExceptionHandler {
             return errorDetail;
         }
 
+        if (exception instanceof ForbiddenException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
+            errorDetail.setProperty("description", "You do not have permission to access this resource");
+
+            return errorDetail;
+        }
+
+        if (exception instanceof NotFoundException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
+            errorDetail.setProperty("description", "Resource not found");
+
+            return errorDetail;
+        }
+
         if (exception instanceof AccountStatusException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(403), exception.getMessage());
             errorDetail.setProperty("description", "The account is locked");

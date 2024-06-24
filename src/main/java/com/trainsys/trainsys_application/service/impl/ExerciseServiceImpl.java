@@ -4,7 +4,10 @@ import com.trainsys.trainsys_application.dto.RegisterExerciseDto;
 import com.trainsys.trainsys_application.entity.ExerciseEntity;
 import com.trainsys.trainsys_application.entity.UserEntity;
 import com.trainsys.trainsys_application.exception.ConflictException;
+import com.trainsys.trainsys_application.exception.ForbiddenException;
+import com.trainsys.trainsys_application.exception.NotFoundException;
 import com.trainsys.trainsys_application.repository.ExerciseRepository;
+import com.trainsys.trainsys_application.repository.WorkoutRepository;
 import com.trainsys.trainsys_application.response.ExerciseResponse;
 import com.trainsys.trainsys_application.service.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,9 @@ import java.util.stream.Collectors;
 public class ExerciseServiceImpl implements ExerciseService {
     @Autowired
     private final ExerciseRepository exerciseRepository;
+
+    @Autowired
+    private WorkoutRepository workoutRepository;
 
     public ExerciseServiceImpl(ExerciseRepository exerciseRepository) {
         this.exerciseRepository = exerciseRepository;
@@ -39,5 +45,20 @@ public class ExerciseServiceImpl implements ExerciseService {
         return exercises.stream()
                 .map(exercise -> new ExerciseResponse(exercise.getId(),exercise.getDescription()))
                 .collect(Collectors.toList());
+    }
+
+    public void deleteExercise(UserEntity user, Long exerciseId) throws ConflictException, ForbiddenException, NotFoundException {
+        ExerciseEntity exercise = exerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new NotFoundException("Exercise not found"));
+
+        if (!exercise.getUser().getId().equals(user.getId())) {
+            throw new ForbiddenException("You do not have permission to delete this exercise");
+        }
+
+        if (workoutRepository.existsByExercise(exercise)) {
+            throw new ConflictException("Exercise cannot be deleted due to linked workouts");
+        }
+
+        exerciseRepository.delete(exercise);
     }
 }

@@ -36,4 +36,10 @@ public class ExerciseController {
         List<ExerciseResponse> exercises = exerciseService.getExercises(user);
         return new ResponseEntity<>(exercises, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteExercise(@AuthenticationPrincipal UserEntity user, @PathVariable Long id) {
+        exerciseService.deleteExercise(user, id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

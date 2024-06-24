@@ -9,5 +9,8 @@ import java.util.List;
 
 public interface ExerciseService {
     ExerciseResponse createExercise(UserEntity user, RegisterExerciseDto request);
+
     List<ExerciseResponse> getExercises(UserEntity user);
+
+    void deleteExercise(UserEntity user, Long id);
 }
