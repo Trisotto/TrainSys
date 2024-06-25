@@ -4,8 +4,8 @@ import com.trainsys.trainsys_application.dto.RegisterStudentDto;
 import com.trainsys.trainsys_application.entity.StudentEntity;
 import com.trainsys.trainsys_application.entity.UserEntity;
 import com.trainsys.trainsys_application.exception.ForbiddenException;
+import com.trainsys.trainsys_application.exception.NotFoundException;
 import com.trainsys.trainsys_application.repository.StudentRepository;
-import com.trainsys.trainsys_application.repository.UserRepository;
 import com.trainsys.trainsys_application.response.StudentResponse;
 import com.trainsys.trainsys_application.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,6 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -55,6 +52,7 @@ public class StudentServiceImpl implements StudentService {
         student.setNeighborhood(request.getNeighborhood());
         student.setCity(request.getCity());
         student.setNumber(request.getNumber());
+        student.setIsDeleted(false);
 
         StudentEntity savedStudent = studentRepository.save(student);
 
@@ -72,6 +70,18 @@ public class StudentServiceImpl implements StudentService {
         return students.stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteStudent(UserEntity user, Long studentId) throws ForbiddenException, NotFoundException {
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new NotFoundException("Student not found"));
+
+        if (!student.getUser().getId().equals(user.getId())) {
+            throw new ForbiddenException("You do not have permission to delete this student");
+        }
+
+        student.setIsDeleted(true);
+        studentRepository.save(student);
     }
 
     private StudentResponse mapToResponse(StudentEntity student) {

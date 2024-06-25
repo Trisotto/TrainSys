@@ -11,4 +11,6 @@ public interface StudentService {
     StudentResponse registerStudent(UserEntity user, RegisterStudentDto request);
 
     List<StudentResponse> listStudents(UserEntity user, String search);
+
+    void deleteStudent(UserEntity user, Long id);
 }

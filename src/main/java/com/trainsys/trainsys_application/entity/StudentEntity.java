@@ -50,6 +50,9 @@ public class StudentEntity {
     @Column(name = "cep", length = 20)
     private String cep;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     public Long getId() {
         return id;
     }
@@ -152,5 +155,13 @@ public class StudentEntity {
 
     public void setCep(String cep) {
         this.cep = cep;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

@@ -12,6 +12,6 @@ CREATE TABLE dev.students (
     street VARCHAR(30),
     state VARCHAR(2),
     cep VARCHAR(20),
-    is_deleted BIT NOT NULL DEFAULT B'0',
+    is_deleted BOOLEAN NOT NULL DEFAULT 'f',
     CONSTRAINT pk_tbl_students PRIMARY KEY (id)
 );

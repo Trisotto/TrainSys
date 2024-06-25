@@ -34,4 +34,10 @@ public class StudentController {
         List<StudentResponse> students = studentService.listStudents(user, search);
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteStudent(@AuthenticationPrincipal UserEntity user, @PathVariable Long id) {
+        studentService.deleteStudent(user, id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
