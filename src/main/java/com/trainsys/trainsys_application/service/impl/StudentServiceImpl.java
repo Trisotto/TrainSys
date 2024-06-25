@@ -11,6 +11,9 @@ import com.trainsys.trainsys_application.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class StudentServiceImpl implements StudentService {
     @Autowired
@@ -55,20 +58,36 @@ public class StudentServiceImpl implements StudentService {
 
         StudentEntity savedStudent = studentRepository.save(student);
 
-        StudentResponse response = new StudentResponse();
-        response.setId(savedStudent.getId());
-        response.setName(savedStudent.getName());
-        response.setEmail(savedStudent.getEmail());
-        response.setDateBirth(savedStudent.getDateBirth());
-        response.setCpf(savedStudent.getCpf());
-        response.setContact(savedStudent.getContact());
-        response.setCep(savedStudent.getCep());
-        response.setStreet(savedStudent.getStreet());
-        response.setState(savedStudent.getState());
-        response.setNeighborhood(savedStudent.getNeighborhood());
-        response.setCity(savedStudent.getCity());
-        response.setNumber(savedStudent.getNumber());
+        return mapToResponse(savedStudent);
+    }
 
+    public List<StudentResponse> listStudents(UserEntity user, String search) {
+        List<StudentEntity> students;
+        if (search == null || search.isEmpty()) {
+            students = studentRepository.findByUserOrderByName(user);
+        } else {
+            students = studentRepository.findByUserAndNameOrCpfOrEmailOrderByName(
+                    user, search, search, search);
+        }
+        return students.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    private StudentResponse mapToResponse(StudentEntity student) {
+        StudentResponse response = new StudentResponse();
+        response.setId(student.getId());
+        response.setName(student.getName());
+        response.setEmail(student.getEmail());
+        response.setDateBirth(student.getDateBirth());
+        response.setCpf(student.getCpf());
+        response.setContact(student.getContact());
+        response.setCep(student.getCep());
+        response.setStreet(student.getStreet());
+        response.setState(student.getState());
+        response.setNeighborhood(student.getNeighborhood());
+        response.setCity(student.getCity());
+        response.setNumber(student.getNumber());
         return response;
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/students")
 public class StudentController {
@@ -24,5 +26,12 @@ public class StudentController {
     public ResponseEntity<?> registerStudent(@AuthenticationPrincipal UserEntity user, @Valid @RequestBody RegisterStudentDto request) {
         StudentResponse registeredStudent = studentService.registerStudent(user, request);
         return new ResponseEntity<>(registeredStudent, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> listStudents(@AuthenticationPrincipal UserEntity user,
+                                          @RequestParam(required = false) String search) {
+        List<StudentResponse> students = studentService.listStudents(user, search);
+        return new ResponseEntity<>(students, HttpStatus.OK);
     }
 }
