@@ -24,6 +24,18 @@ public class WorkoutResponse {
 
     private Integer time;
 
+    public WorkoutResponse(Long id, Long studentId, Long exerciseId, Integer repetitions, Double weight, Integer breakTime, DayOfWeekEnum day, String observations, Integer time) {
+        this.id = id;
+        this.studentId = studentId;
+        this.exerciseId = exerciseId;
+        this.repetitions = repetitions;
+        this.weight = weight;
+        this.breakTime = breakTime;
+        this.day = day;
+        this.observations = observations;
+        this.time = time;
+    }
+
     public Long getId() {
         return id;
     }

@@ -26,6 +26,7 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
     @Query("SELECT s FROM StudentEntity s WHERE s.user = :user AND (s.name LIKE %:name% OR s.cpf LIKE %:cpf% OR s.email LIKE %:email%) AND s.isDeleted = false ORDER BY s.name")
     List<StudentEntity> findByUserAndNameOrCpfOrEmailOrderByName(UserEntity user, String name, String cpf, String email);
 
+    @Override
     @Query("SELECT s FROM StudentEntity s WHERE s.id = :id AND s.isDeleted = false")
     Optional<StudentEntity> findById(Long id);
 }

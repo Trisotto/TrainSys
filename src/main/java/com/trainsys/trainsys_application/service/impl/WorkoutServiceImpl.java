@@ -1,6 +1,7 @@
 package com.trainsys.trainsys_application.service.impl;
 
 import com.trainsys.trainsys_application.dto.RegisterWorkoutDto;
+import com.trainsys.trainsys_application.entity.DayOfWeekEnum;
 import com.trainsys.trainsys_application.entity.ExerciseEntity;
 import com.trainsys.trainsys_application.entity.StudentEntity;
 import com.trainsys.trainsys_application.entity.WorkoutEntity;
@@ -9,10 +10,14 @@ import com.trainsys.trainsys_application.repository.ExerciseRepository;
 import com.trainsys.trainsys_application.repository.StudentRepository;
 import com.trainsys.trainsys_application.repository.WorkoutRepository;
 import com.trainsys.trainsys_application.response.StudentResponse;
+import com.trainsys.trainsys_application.response.StudentWorkoutResponse;
 import com.trainsys.trainsys_application.response.WorkoutResponse;
 import com.trainsys.trainsys_application.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkoutServiceImpl implements WorkoutService {
@@ -55,17 +60,44 @@ public class WorkoutServiceImpl implements WorkoutService {
         return mapToResponse(savedWorkout);
     }
 
+    public StudentWorkoutResponse listWorkoutsByStudent(Long studentId) {
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+
+        List<WorkoutEntity> workouts = workoutRepository.findByStudentOrderByDay(student);
+        Map<String, List<WorkoutResponse>> workoutsByDay = new LinkedHashMap<>();
+
+        Arrays.stream(DayOfWeekEnum.values()).forEach(day -> workoutsByDay.put(day.name(), new ArrayList<>()));
+
+        for (WorkoutEntity workout : workouts) {
+            WorkoutResponse workoutResponse = new WorkoutResponse(
+                    workout.getId(),
+                    workout.getStudent().getId(),
+                    workout.getExercise().getId(),
+                    workout.getRepetitions(),
+                    workout.getWeight(),
+                    workout.getBreakTime(),
+                    workout.getDay(),
+                    workout.getObservations(),
+                    workout.getTime()
+            );
+            workoutsByDay.get(workout.getDay().name()).add(workoutResponse);
+        }
+
+        return new StudentWorkoutResponse(student.getId(), student.getName(), workoutsByDay);
+    }
+
     private WorkoutResponse mapToResponse(WorkoutEntity workout) {
-        WorkoutResponse response = new WorkoutResponse();
-        response.setId(workout.getId());
-        response.setStudentId(workout.getStudent().getId());
-        response.setExerciseId(workout.getExercise().getId());
-        response.setRepetitions(workout.getRepetitions());
-        response.setWeight(workout.getWeight());
-        response.setBreakTime(workout.getBreakTime());
-        response.setDay(workout.getDay());
-        response.setObservations(workout.getObservations());
-        response.setTime(workout.getTime());
-        return response;
+        return new WorkoutResponse(
+                workout.getId(),
+                workout.getStudent().getId(),
+                workout.getExercise().getId(),
+                workout.getRepetitions(),
+                workout.getWeight(),
+                workout.getBreakTime(),
+                workout.getDay(),
+                workout.getObservations(),
+                workout.getTime()
+        );
     }
 }
