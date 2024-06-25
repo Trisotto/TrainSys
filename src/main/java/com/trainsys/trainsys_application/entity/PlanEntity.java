@@ -14,6 +14,9 @@ public class PlanEntity {
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
+    @Column(name = "students_limit", nullable = false)
+    private Short studentsLimit;
+
     public Long getId() {
         return id;
     }
@@ -28,5 +31,13 @@ public class PlanEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Short getStudentsLimit() {
+        return studentsLimit;
+    }
+
+    public void setStudentsLimit(Short studentsLimit) {
+        this.studentsLimit = studentsLimit;
     }
 }

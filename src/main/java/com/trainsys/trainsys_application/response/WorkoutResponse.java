@@ -1,42 +1,40 @@
-package com.trainsys.trainsys_application.entity;
+package com.trainsys.trainsys_application.response;
 
-import com.trainsys.trainsys_application.config.database.DatabaseSchema;
+import com.trainsys.trainsys_application.entity.DayOfWeekEnum;
+import com.trainsys.trainsys_application.entity.ExerciseEntity;
+import com.trainsys.trainsys_application.entity.StudentEntity;
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "workouts", schema = DatabaseSchema.DEV)
-public class WorkoutEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class WorkoutResponse {
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
-    private StudentEntity student;
+    private Long studentId;
 
-    @ManyToOne
-    @JoinColumn(name = "exercise_id", nullable = false)
-    private ExerciseEntity exercise;
+    private Long exerciseId;
 
-    @Column(name = "repetitions", nullable = false)
     private Integer repetitions;
 
-    @Column(name = "weight", nullable = false)
     private Double weight;
 
-    @Column(name = "break_time", nullable = false)
     private Integer breakTime;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "day", nullable = false)
     private DayOfWeekEnum day;
 
-    @Column(name = "observations", columnDefinition = "TEXT")
     private String observations;
 
-    @Column(name = "time", nullable = false)
     private Integer time;
+
+    public WorkoutResponse(Long id, Long studentId, Long exerciseId, Integer repetitions, Double weight, Integer breakTime, DayOfWeekEnum day, String observations, Integer time) {
+        this.id = id;
+        this.studentId = studentId;
+        this.exerciseId = exerciseId;
+        this.repetitions = repetitions;
+        this.weight = weight;
+        this.breakTime = breakTime;
+        this.day = day;
+        this.observations = observations;
+        this.time = time;
+    }
 
     public Long getId() {
         return id;
@@ -46,20 +44,20 @@ public class WorkoutEntity {
         this.id = id;
     }
 
-    public StudentEntity getStudent() {
-        return student;
+    public Long getStudentId() {
+        return studentId;
     }
 
-    public void setStudent(StudentEntity student) {
-        this.student = student;
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 
-    public ExerciseEntity getExercise() {
-        return exercise;
+    public Long getExerciseId() {
+        return exerciseId;
     }
 
-    public void setExercise(ExerciseEntity exercise) {
-        this.exercise = exercise;
+    public void setExerciseId(Long exerciseId) {
+        this.exerciseId = exerciseId;
     }
 
     public Integer getRepetitions() {

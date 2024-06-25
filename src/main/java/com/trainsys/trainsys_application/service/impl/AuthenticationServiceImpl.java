@@ -8,6 +8,7 @@ import com.trainsys.trainsys_application.entity.UserEntity;
 import com.trainsys.trainsys_application.repository.PlanRepository;
 import com.trainsys.trainsys_application.repository.RoleRepository;
 import com.trainsys.trainsys_application.repository.UserRepository;
+import com.trainsys.trainsys_application.response.SignUpResponse;
 import com.trainsys.trainsys_application.service.AuthenticationService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserEntity signUp(RegisterUserDto input) {
+    public SignUpResponse signUp(RegisterUserDto input) {
         Optional<RoleEntity> optionalRole = roleRepository.findByName(RoleEnum.USER);
 
         if (optionalRole.isEmpty()) {
@@ -54,7 +55,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPlan(planRepository.findByName(input.getPlan()));
         user.setRole(optionalRole.get());
 
-        return userRepository.save(user);
+        UserEntity registeredUser = userRepository.save(user);
+
+        SignUpResponse signUpResponse  = new SignUpResponse();
+        signUpResponse.setName(registeredUser.getName());
+        signUpResponse.setEmail(registeredUser.getEmail());
+        signUpResponse.setDateBirth(registeredUser.getDateBirth());
+        signUpResponse.setCpf(registeredUser.getCpf());
+        signUpResponse.setPlanName(registeredUser.getPlan().getName());
+        signUpResponse.setRoleDescription(registeredUser.getRole().getDescription());
+
+        return signUpResponse;
     }
 
     public UserEntity authenticate(LoginUserDto input) {
