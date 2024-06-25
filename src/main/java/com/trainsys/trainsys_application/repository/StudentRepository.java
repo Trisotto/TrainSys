@@ -8,4 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
     Integer countByUser(UserEntity user);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByCpf(String cpf);
 }
