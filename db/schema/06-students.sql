@@ -1,9 +1,9 @@
 CREATE TABLE dev.students (
     id SERIAL,
     name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL,
     date_birth DATE NOT NULL,
-    cpf VARCHAR(14) NOT NULL UNIQUE,
+    cpf VARCHAR(14) NOT NULL,
     contact VARCHAR(20) NOT NULL,
     user_id INTEGER NOT NULL,
     city VARCHAR(50),
