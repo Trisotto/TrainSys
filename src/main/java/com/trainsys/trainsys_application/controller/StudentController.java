@@ -1,6 +1,7 @@
 package com.trainsys.trainsys_application.controller;
 
 import com.trainsys.trainsys_application.dto.RegisterStudentDto;
+import com.trainsys.trainsys_application.dto.UpdateStudentDto;
 import com.trainsys.trainsys_application.entity.StudentEntity;
 import com.trainsys.trainsys_application.entity.UserEntity;
 import com.trainsys.trainsys_application.response.StudentResponse;
@@ -39,5 +40,11 @@ public class StudentController {
     public ResponseEntity<?> deleteStudent(@AuthenticationPrincipal UserEntity user, @PathVariable Long id) {
         studentService.deleteStudent(user, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateStudent(@AuthenticationPrincipal UserEntity user, @PathVariable Long id, @Valid @RequestBody UpdateStudentDto request) {
+        StudentResponse updatedStudent = studentService.updateStudent(user, id, request);
+        return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
     }
 }

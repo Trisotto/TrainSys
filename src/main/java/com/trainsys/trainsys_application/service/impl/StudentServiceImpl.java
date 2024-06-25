@@ -1,6 +1,7 @@
 package com.trainsys.trainsys_application.service.impl;
 
 import com.trainsys.trainsys_application.dto.RegisterStudentDto;
+import com.trainsys.trainsys_application.dto.UpdateStudentDto;
 import com.trainsys.trainsys_application.entity.StudentEntity;
 import com.trainsys.trainsys_application.entity.UserEntity;
 import com.trainsys.trainsys_application.exception.ForbiddenException;
@@ -82,6 +83,31 @@ public class StudentServiceImpl implements StudentService {
 
         student.setIsDeleted(true);
         studentRepository.save(student);
+    }
+
+    public StudentResponse updateStudent(UserEntity user, Long studentId, UpdateStudentDto request) throws ForbiddenException, NotFoundException {
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new NotFoundException("Student not found"));
+
+        if (!student.getUser().getId().equals(user.getId())) {
+            throw new ForbiddenException("You do not have permission to update this student");
+        }
+
+        if (request.getName() != null) student.setName(request.getName());
+        if (request.getEmail() != null) student.setEmail(request.getEmail());
+        if (request.getDateBirth() != null) student.setDateBirth(request.getDateBirth());
+        if (request.getCpf() != null) student.setCpf(request.getCpf());
+        if (request.getContact() != null) student.setContact(request.getContact());
+        if (request.getCep() != null) student.setCep(request.getCep());
+        if (request.getStreet() != null) student.setStreet(request.getStreet());
+        if (request.getState() != null) student.setState(request.getState());
+        if (request.getNeighborhood() != null) student.setNeighborhood(request.getNeighborhood());
+        if (request.getCity() != null) student.setCity(request.getCity());
+        if (request.getNumber() != null) student.setNumber(request.getNumber());
+
+        StudentEntity savedStudent = studentRepository.save(student);
+
+        return mapToResponse(savedStudent);
     }
 
     private StudentResponse mapToResponse(StudentEntity student) {
