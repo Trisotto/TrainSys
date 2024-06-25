@@ -2,6 +2,7 @@ package com.trainsys.trainsys_application.service.impl;
 
 import com.trainsys.trainsys_application.dto.RegisterStudentDto;
 import com.trainsys.trainsys_application.dto.UpdateStudentDto;
+import com.trainsys.trainsys_application.dto.AddressDto;
 import com.trainsys.trainsys_application.entity.StudentEntity;
 import com.trainsys.trainsys_application.entity.UserEntity;
 import com.trainsys.trainsys_application.exception.ForbiddenException;
@@ -111,6 +112,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     private StudentResponse mapToResponse(StudentEntity student) {
+        AddressDto addressDto = new AddressDto();
+        addressDto.setCep(student.getCep());
+        addressDto.setStreet(student.getStreet());
+        addressDto.setState(student.getState());
+        addressDto.setNeighborhood(student.getNeighborhood());
+        addressDto.setCity(student.getCity());
+        addressDto.setNumber(student.getNumber());
+
         StudentResponse response = new StudentResponse();
         response.setId(student.getId());
         response.setName(student.getName());
@@ -118,12 +127,14 @@ public class StudentServiceImpl implements StudentService {
         response.setDateBirth(student.getDateBirth());
         response.setCpf(student.getCpf());
         response.setContact(student.getContact());
-        response.setCep(student.getCep());
-        response.setStreet(student.getStreet());
-        response.setState(student.getState());
-        response.setNeighborhood(student.getNeighborhood());
-        response.setCity(student.getCity());
-        response.setNumber(student.getNumber());
+        response.setAddress(addressDto);
         return response;
+    }
+
+    public StudentResponse getStudentById(Long studentId) {
+        StudentEntity student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+
+        return mapToResponse(student);
     }
 }

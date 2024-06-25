@@ -60,4 +60,10 @@ public class StudentController {
         StudentWorkoutResponse workouts = workoutService.listWorkoutsByStudent(id);
         return new ResponseEntity<>(workouts, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getStudentById(@AuthenticationPrincipal UserEntity user, @PathVariable Long id) {
+        StudentResponse student = studentService.getStudentById(id);
+        return new ResponseEntity<>(student, HttpStatus.OK);
+    }
 }

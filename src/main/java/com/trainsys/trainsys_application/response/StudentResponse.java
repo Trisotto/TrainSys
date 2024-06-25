@@ -1,5 +1,7 @@
 package com.trainsys.trainsys_application.response;
 
+import com.trainsys.trainsys_application.dto.AddressDto;
+
 import java.time.LocalDate;
 
 public class StudentResponse {
@@ -9,14 +11,13 @@ public class StudentResponse {
     private LocalDate dateBirth;
     private String cpf;
     private String contact;
+    private AddressDto address;
     private String cep;
     private String street;
     private String state;
     private String neighborhood;
     private String city;
     private String number;
-
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -65,51 +66,11 @@ public class StudentResponse {
         this.contact = contact;
     }
 
-    public String getCep() {
-        return cep;
+    public AddressDto getAddress() {
+        return address;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getNeighborhood() {
-        return neighborhood;
-    }
-
-    public void setNeighborhood(String neighborhood) {
-        this.neighborhood = neighborhood;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
+    public void setAddress(AddressDto address) {
+        this.address = address;
     }
 }
