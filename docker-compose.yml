@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  db:
+    restart: always
+    container_name: trainsysdb
+    build:
+      context: ./db
+    environment:
+      POSTGRES_DB: trainsysdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5431:5432"
